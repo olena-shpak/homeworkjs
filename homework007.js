@@ -228,26 +228,12 @@ console.log(censoredResult);
     sort(persons, "name", false);
     console.log(persons);
 
-{<input type='number' id="firstNumber" />
-<input type='number' id="secondNumber" />
-<div id="divisionResult">
-    текст у div
-</div>
-<script>
-    const calcResult = () => {
-        console.log(firstNumber.value, secondNumber.value, divisionResult.innerHTML)
-        divisionResult.innerHTML = "Текст у <code>div</code> змінено за допомогою <strong>Javascript</strong><br/>" + Math.random()
-    }
-    
-    firstNumber.oninput = secondNumber.oninput = calcResult
-</script>}
-
-
+  //  файл: divide-hw007.html
 
 
     let tarif = 7.96;
-    let summa = (input1, input2) => {
-    let result3 = (input2 - input1) * tarif;
+    let summa = (previousValue, nextValue) => {
+    let result3 = ( nextValue- previousValue) * tarif;
     return result3;
 }
     let previousValue = parseFloat(prompt('Input previous value'));
@@ -256,7 +242,7 @@ console.log(censoredResult);
     console.log(result3);
 
 
-
+  //  файл: calc-live-hw007.html
 
 
 

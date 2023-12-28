@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc Live</title>
+</head>
+<body>
+    <input type='number' id="firstNumber" />
+    <input type='number' id="secondNumber" />
+    <div id="divisionResult">
+    текст у div
+</div>
+<script>
+    let tarif = 7.96;
+   const summa = () => {
+            let previousValue = parseFloat(firstNumber.value);
+            let nextValue = parseFloat(secondNumber.value);
+
+            if (!isNaN(previousValue) && !isNaN(nextValue)) {
+                const result3 = (nextValue - previousValue) * tarif;
+                divisionResult.innerHTML = `Результат : ${result3.toFixed(2)}`; 
+            } else {
+                divisionResult.innerHTML = "Некоректні вхідні дані. ";
+            }
+        }
+
+        window.firstNumber = document.getElementById('firstNumber');
+        window.secondNumber = document.getElementById('secondNumber');
+        window.divisionResult = document.getElementById('divisionResult');
+
+        firstNumber.oninput = secondNumber.oninput = summa;
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divide</title>
+</head>
+<body>
+    <input type='number' id="firstNumber" />
+<input type='number' id="secondNumber" />
+<div id="divisionResult">
+    текст у div
+</div>
+<script>
+        const calcResult = () => {
+        const firstValue = parseFloat(firstNumber.value); 
+         const secondValue = parseFloat(secondNumber.value);
+
+        if (!isNaN(firstValue) && !isNaN(secondValue) && secondValue !== 0) {
+            const result = Math.floor(firstValue / secondValue);
+            divisionResult.innerHTML = `Результат поділу: ${result}`;
+        } else {
+            divisionResult.innerHTML = "Некоректні вхідні дані. Друге число не може бути 0.";
+        }
+    }
+
+  
+    window.firstNumber = document.getElementById('firstNumber');
+    window.secondNumber = document.getElementById('secondNumber');
+    window.divisionResult = document.getElementById('divisionResult');
+
+    firstNumber.oninput = secondNumber.oninput = calcResult;
+</script>
+</body>
+</html>
