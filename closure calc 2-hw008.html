@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>closure calc 2</title>
+</head>
+<body>
+    <label for="from">From Currency:</label>
+    <select id="from">  </select>
+    <label for="to"> To Currency:</label>
+    <select id='to'>  </select>
+   <div id="rate"> Exchange Rate: <span id="exchangeRate">0.00</span></div>
+    <label for="amount">Amount in From Currency:</label>
+    <input type="number" id="amount" />
+
+    <div id="result">Amount in To Currency: <span id="convertedAmount">0.00</span></div>
+
+    <script>
+     fetch('https://open.er-api.com/v6/latest/USD')
+            .then(res => res.json())
+            .then(data => {
+                const fromSelect = document.getElementById('from');
+                const toSelect = document.getElementById('to');
+                const exchangeRateSpan = document.getElementById('exchangeRate');
+                const amountInput = document.getElementById('amount');
+                const resultSpan = document.getElementById('convertedAmount');
+
+                for (const currency in data.rates) {
+                    const optionFrom = document.createElement('option');
+                    optionFrom.value = currency;  
+                    optionFrom.innerText = currency;
+                    fromSelect.appendChild(optionFrom);
+
+                    const optionTo = document.createElement('option');
+                    optionTo.value = currency;  
+                    optionTo.innerText = currency;
+                    toSelect.appendChild(optionTo);
+                }
+
+                updateExchangeRate();
+
+                fromSelect.onchange = updateExchangeRate;
+                toSelect.onchange = updateExchangeRate;
+                amountInput.oninput = convertAmount;
+
+                function updateExchangeRate() {
+                    const fromCurrency = fromSelect.value;
+                    const toCurrency = toSelect.value;
+
+                    const exchangeRate = data.rates[toCurrency] / data.rates[fromCurrency];
+                    exchangeRateSpan.innerText = exchangeRate.toFixed(3);
+                    convertAmount();
+                }
+
+                function convertAmount() {
+                    const fromCurrency = fromSelect.value;
+                    const toCurrency = toSelect.value;
+                    const amount = parseFloat(amountInput.value) || 0;
+
+                    const exchangeRate = data.rates[toCurrency] / data.rates[fromCurrency];
+                    const convertedAmount = amount * exchangeRate;
+                    resultSpan.innerText = convertedAmount.toFixed(2);
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    
+            
+</script>
+</body>
+</html>

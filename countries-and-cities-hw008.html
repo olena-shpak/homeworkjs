@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>countries and cities</title>
+</head>
+<body>
+    <label for="countries">Select Country:</label>
+    <select id="countries"></select>
+    <label for="cities"> Select City:</label>
+    <select id="cities">  </select>
+   
+<script>
+ 
+ fetch('https://raw.githubusercontent.com/russ666/all-countries-and-cities-json/master/countries.min.json')
+             .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                const countriesSelect = document.getElementById('countries');
+                const citiesSelect = document.getElementById('cities');
+
+                for (const country in data) {
+                    const optionCountry = document.createElement('option');
+                    optionCountry.value = country;
+                    optionCountry.innerText = country;
+                    countriesSelect.appendChild(optionCountry);
+                }
+                countriesSelect.onchange = function () {
+                    const selectedCountry = countriesSelect.value;
+
+                    citiesSelect.innerHTML = '';
+
+                    if (selectedCountry in data) {
+                        const cities = data[selectedCountry];
+                        for (const city of cities) {
+                            const optionCity = document.createElement('option');
+                            optionCity.value = city;
+                            optionCity.innerText = city;
+                            citiesSelect.appendChild(optionCity);
+                        }
+                    }
+                };
+            })
+
+                .catch(error => console.error('Error fetching data:', error));
+        
+   
+</script>
+</body>
+</html>
