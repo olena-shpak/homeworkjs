@@ -147,7 +147,7 @@ let system = {
     let result = amount*data.rates[conversationcurency];
     if(!data.rates[incurency] || !data.rates[conversationcurency]) {console.log('Некоректні дані. Будь ласка, перевірте вхідні дані.')} else{
      return result.toFixed(2);}
-                         })
+                document.write(result)         })
     
                  
     fetch('https://open.er-api.com/v6/latest/USD')
