@@ -38,7 +38,7 @@
                     toSelect.appendChild(optionTo);
                 }
 
-                updateExchangeRate();
+                
 
                 fromSelect.onchange = updateExchangeRate;
                 toSelect.onchange = updateExchangeRate;
@@ -50,8 +50,9 @@
 
                     const exchangeRate = data.rates[toCurrency] / data.rates[fromCurrency];
                     exchangeRateSpan.innerText = exchangeRate.toFixed(3);
-                    convertAmount();
-                }
+                    
+                    
+                } updateExchangeRate();
 
                 function convertAmount() {
                     const fromCurrency = fromSelect.value;
@@ -61,7 +62,8 @@
                     const exchangeRate = data.rates[toCurrency] / data.rates[fromCurrency];
                     const convertedAmount = amount * exchangeRate;
                     resultSpan.innerText = convertedAmount.toFixed(2);
-                }
+                    
+                }convertAmount();
             })
             .catch(error => console.error('Error fetching data:', error));
     
