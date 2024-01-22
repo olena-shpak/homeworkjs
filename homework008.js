@@ -40,26 +40,31 @@ let a = 10
 
 
 
-var age = + prompt ("Скільки вам років?", "");
-if(age > 0 && age < 6){
-    alert("чи немовля, чи дошкілнятко");}
-    else {if (age < 18) {
-    alert("школяр");
+var age = +prompt("Скільки вам років?", "");
+
+if (age > 0 && age < 6) {
+    alert("чи немовля, чи дошкіллятко");
+} else {
+    if (age < 18) {
+        alert("школяр");
+    } else {
+        if (age > 18 && age < 30) {
+            alert("молодь");
+        } else {
+            if (age > 30 && age < 45) {
+                alert("зрілість");
+            } else {
+                if (age > 45 && age < 60) {
+                    alert("захід сонця");
+                } else if (age >= 60) {
+                    alert("як пенсія?");
+                } else {
+                    alert("чи кіборг, чи KERNESS");
+                }
+            }
+        }
+    }
 }
-else {if (age > 18 && age < 30){
-    alert("молодь");
-}
-else {if (age > 30 && age < 45){
-    alert("зрілість");
-}
-else {if (age > 45 && age < 60){
-    alert("захід сонця");
-}
-else {if (age > 60) {
-    alert("як пенсія?");
-}
- 
-}}}}}
 
 
 
@@ -87,16 +92,21 @@ default:
 
 
 
-let color1 = prompt("Введіть колір","");
-if (color1==="red") {
-  document.write("<div style='background-color: red;'>червоний</div>"),  
-  document.write("<div style='background-color: black; color: white;'>чорний</div>");}
-else if (color1==="black") { document.write("<div style='background-color: black; color: white;'>чорний</div>");}
-else if (color1==="blue") {document.write("<div style='background-color: blue;'>синій</div>"),
-                           document.write("<div style='background-color: green;'>зелени й</div>");}
-else if (color1==="green") {document.write("<div style='background-color: green;'>зелени й</div>");}
-            
- else { document.write("<div style='background-color: gray;'>Я не зрозумів</div>");}
+let color1 = prompt("Введіть колір", "");
+
+if (color1 === "red") {
+    document.write("<div style='background-color: red;'>червоний</div>");
+    document.write("<div style='background-color: black; color: white;'>чорний</div>");
+} else if (color1 === "black") {
+    document.write("<div style='background-color: black; color: white;'>чорний</div>");
+} else if (color1 === "blue") {
+    document.write("<div style='background-color: blue;'>синій</div>");
+    document.write("<div style='background-color: green;'>зелений</div>");
+} else if (color1 === "green") {
+    document.write("<div style='background-color: green;'>зелений</div>");
+} else {
+    document.write("<div style='background-color: gray;'>Я не зрозумів</div>");
+}
 
 
 
