@@ -73,10 +73,12 @@ console.log(arr);}
     console.log(`Сума арифметичної прогресії від 1 до ${N} з кроком 3: ${sum}`);
 
 
-    let length = prompt('Введіть довжину рядка:');
-    let str = '';
-    for (i=0; i<length; i++){str+='#'}
-    console.log(str)
+   let length = prompt('Введіть довжину рядка:');
+   let str = '';
+   for (i = 0; i < length; i++) {
+         str += (i % 2 === 0) ? '#' : '.';
+     }
+   console.log(str)
 
 
     let str2 ='';
@@ -175,48 +177,51 @@ console.log(arr);}
     
     
 
-
-       const table = document.createElement("table");
-             for (let i=0; i<10; i++){
-            const row = document.createElement("tr");
-        
-        for(let j=0; j<10; j++){
-        const cell = document.createElement('td')
-         if (i ===0 && j ===0)
-        {cell.innerText = '0'; }
-        else if(i===0) {cell.innerText = j;}
-        else if( j ===0){cell.innerText = i;}
-        else{ cell.innerText = i*j;}
-        row.appendChild(cell)
-     }
-     table.appendChild(row);}
-     document.body.appendChild(table);
-
-
-
-
-
-    { const table = document.createElement("table");
-    for (let i=0; i<10; i++){
+const table = document.createElement("table");
+for (let i = 0; i < 10; i++) {
     const row = document.createElement("tr");
 
-    for(let j=0; j<10; j++){
-    const cell = document.createElement('td')
-    if (i ===0 && j ===0)
-    {cell.innerText = '0'; }
-    else if(i===0) {cell.innerText = j;}
-    else if( j ===0){cell.innerText = i;}
-    else{ cell.innerText = i*j;}
-    cell.addEventListener('mouseover', function(){
-        this.style.backgroundColor = 'green';
-    })
-    cell.addEventListener('mouseout', function(){
-        this.style.backgroundColor = '';
-    })
-    row.appendChild(cell)
+    for (let j = 0; j < 10; j++) {
+        const cell = document.createElement('td')
+        if (i === 0 && j === 0) { cell.innerText = '0'; }
+        else if (i === 0) { cell.innerText = j; }
+        else if (j === 0) { cell.innerText = i; }
+        else { cell.innerText = i * j; }
+        row.appendChild(cell)
     }
-    table.appendChild(row);}
-    document.body.appendChild(table);}
+    table.appendChild(row);
+}
+document.body.appendChild(table);
+
+
+
+
+
+{
+    const table = document.createElement("table");
+    for (let i = 0; i < 10; i++) {
+        const row = document.createElement("tr");
+
+        for (let j = 0; j < 10; j++) {
+            const cell = document.createElement('td')
+            if (i === 0 && j === 0) { cell.innerText = '0'; }
+            else if (i === 0) { cell.innerText = j; }
+            else if (j === 0) { cell.innerText = i; }
+            else { cell.innerText = i * j; }
+            cell.addEventListener('mouseover', function () {
+                this.style.backgroundColor = 'green';
+            })
+            cell.addEventListener('mouseout', function () {
+                this.style.backgroundColor = '';
+            })
+            row.appendChild(cell)
+        }
+        table.appendChild(row);
+    }
+    document.body.appendChild(table);
+}
+
+
 
 
 
