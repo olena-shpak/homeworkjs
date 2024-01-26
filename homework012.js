@@ -33,12 +33,12 @@ document.body.appendChild(select);
 
 const quantityInput = document.createElement('input');
 quantityInput.type = 'number';
-quantityInput.placeholder = 'Enter quantity';
+quantityInput.placeholder = 'Введіть кількість';
 document.body.appendChild(quantityInput);
 
 const fundsInput = document.createElement('input');
 fundsInput.type = 'number';
-fundsInput.placeholder = 'Enter amount of money';
+fundsInput.placeholder = 'Введіть суму грошей';
 document.body.appendChild(fundsInput);
 
 const buyButton = document.createElement('button');
@@ -57,7 +57,7 @@ buyButton.addEventListener('click', () => {
         };
         store.dispatch(action);
     } else {
-        alert('Invalid input. Please enter a valid quantity and amount of money.');
+        alert('Неправильні дані. Будь ласка, введіть дійсну кількість і суму грошей.');
     }
 });
 document.body.appendChild(buyButton);
@@ -67,7 +67,7 @@ function updateDisplay() {
     console.clear();
 
    
-    select.innerHTML = '<option value="goods" disabled selected>Choose a good</option>';
+    select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
     for (let goods in store.getState()) {
         if (store.getState().hasOwnProperty(goods) && typeof store.getState()[goods] === 'object') {
             const option = document.createElement('option');
