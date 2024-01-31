@@ -27,7 +27,7 @@ function createStore(reducer) {
 const store = createStore(reducer);
 
 const select = document.createElement('select');
-select.innerHTML = '<option value="goods" disabled selected>Choose a good</option>';
+select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
 
 document.body.appendChild(select);
 
@@ -60,12 +60,10 @@ buyButton.addEventListener('click', () => {
         alert('Неправильні дані. Будь ласка, введіть дійсну кількість і суму грошей.');
     }
 });
+
 document.body.appendChild(buyButton);
 
 function updateDisplay() {
-   
-    console.clear();
-
    
     select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
     for (let goods in store.getState()) {
@@ -81,14 +79,16 @@ function updateDisplay() {
         if (store.getState().hasOwnProperty(goods) && typeof store.getState()[goods] === 'object') {
             const quantity = store.getState()[goods].quantity;
             const price = store.getState()[goods].price;
-            console.log(`${goods}: ${quantity} шт. по ${price} грн`);
+           alert(`${goods}: ${quantity} шт. по ${price} грн`);
+           
         }
     }
-    console.log(`Гроші в касі: ${store.getState().каса} грн\n`);
+    alert(`Гроші в касі: ${store.getState().каса} грн\n`);
 
     
     document.title = `Каса: ${store.getState().каса} грн`;
 }
+
 
 function reducer(state, action = { type: '', goods: '', number: 0, funds: 0 }) {
     if (!state) {
@@ -102,7 +102,7 @@ function reducer(state, action = { type: '', goods: '', number: 0, funds: 0 }) {
         };
     }
 
-    if (action.type === 'Купити' && state[action.goods].quantity >= action.number) {
+    if (action.type === 'Купити' && state[action.goods].quantity >= action.number && action.funds >= action.number * state[action.goods].price) {
         const totalPrice = action.number * state[action.goods].price;
         return {
             ...state,
