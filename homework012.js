@@ -27,9 +27,19 @@ function createStore(reducer) {
 const store = createStore(reducer);
 
 const select = document.createElement('select');
-select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
 
-document.body.appendChild(select);
+select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
+select.innerText = '[action.goods]';
+
+
+for (let goods in store.getState()) {
+    if (store.getState().hasOwnProperty(goods) && typeof store.getState()[goods] === 'object') {
+        const option = document.createElement('option');
+        option.value = goods;
+        option.innerText = goods;
+        select.appendChild(option);
+    }
+} document.body.appendChild(select);
 
 const quantityInput = document.createElement('input');
 quantityInput.type = 'number';
@@ -63,31 +73,31 @@ buyButton.addEventListener('click', () => {
 
 document.body.appendChild(buyButton);
 
+const displayContainer = document.createElement('div');
+document.body.appendChild(displayContainer);
+
 function updateDisplay() {
-   
-    select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
-    for (let goods in store.getState()) {
-        if (store.getState().hasOwnProperty(goods) && typeof store.getState()[goods] === 'object') {
-            const option = document.createElement('option');
-            option.value = goods;
-            option.innerText = goods;
-            select.appendChild(option);
-        }
-    }
+    displayContainer.innerHTML = '';
 
     for (let goods in store.getState()) {
         if (store.getState().hasOwnProperty(goods) && typeof store.getState()[goods] === 'object') {
             const quantity = store.getState()[goods].quantity;
             const price = store.getState()[goods].price;
-           alert(`${goods}: ${quantity} шт. по ${price} грн`);
-           
+            const itemInfo = document.createElement('p');
+            itemInfo.innerText = `${goods}: ${quantity} шт. по ${price} грн`;
+            displayContainer.appendChild(itemInfo);
         }
     }
-    alert(`Гроші в касі: ${store.getState().каса} грн\n`);
 
-    
+    const cashInfo = document.createElement('p');
+    cashInfo.innerText = `Гроші в касі: ${store.getState().каса} грн`;
+    displayContainer.appendChild(cashInfo);
+
     document.title = `Каса: ${store.getState().каса} грн`;
 }
+
+store.subscribe(updateDisplay);
+updateDisplay();
 
 
 function reducer(state, action = { type: '', goods: '', number: 0, funds: 0 }) {
@@ -127,35 +137,35 @@ store.subscribe(updateDisplay);
 
 
 
- 
+
 
 
 
 
 
 function App() {
-  return (    
-    <div className="App">
-          
-         
-         
-         
-
-         
-         
-        
-    
-          
-         
-      
+    return (
+        <div className="App">
 
 
 
 
 
 
-  
-</div>
-  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    );
 }
 export default App;
