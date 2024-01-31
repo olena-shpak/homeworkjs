@@ -29,8 +29,6 @@ const store = createStore(reducer);
 const select = document.createElement('select');
 
 select.innerHTML = '<option value="goods" disabled selected>Оберіть товар</option>';
-select.innerText = '[action.goods]';
-
 
 for (let goods in store.getState()) {
     if (store.getState().hasOwnProperty(goods) && typeof store.getState()[goods] === 'object') {
