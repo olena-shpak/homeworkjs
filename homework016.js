@@ -7,9 +7,6 @@ async function jsonPost(url, data) {
     try {
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify(data)
         });
         if (!response.ok) {
@@ -22,15 +19,14 @@ async function jsonPost(url, data) {
     }
 }
 
-
-// Додає нове повідомлення до чату
 async function sendMessage(nick, message) {
     try {
+        const timestamp = (new Date()).getTime();
         const result = await jsonPost('http://students.a-level.com.ua:10012', {
             func: 'addMessage',
             nick: nick,
             message: message,
-            timestamp: timestamp =(new Date()).getTime()
+            timestamp: timestamp
         });
         return result;
     } catch (error) {
@@ -39,46 +35,36 @@ async function sendMessage(nick, message) {
     }
 }
 
-// Отримує всі повідомлення з чату
 async function getMessages() {
     try {
         const result = await jsonPost('http://students.a-level.com.ua:10012', {
             func: 'getMessages',
-            messageId: 0 // Починаємо з першого повідомлення
+            messageId: 0
         });
-        return result.data; // Повертаємо тільки дані повідомлень
+        return result.data;
     } catch (error) {
         console.error('There was a problem getting messages:', error.message);
         throw error;
     }
 }
 
-// Функція для малювання повідомлень у DOM
-function renderMessages(messages) {
-    const container = document.getElementById('chat-container');
-    container.innerHTML = ''; // Очистка контейнера
-    messages.forEach(message => {
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
-        const timestamp = new Date(message.timestamp).toLocaleString();
-        messageElement.innerHTML = `<strong>${message.nick}:</strong> ${message.message} (${timestamp})`;
-        container.appendChild(messageElement);
-    });
-}
+function displayMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.textContent = `${message.nick}: ${message.message}`;
 
-// Функція для надсилання повідомлення та оновлення відображення
-async function sendAndCheck() {
-    const nick = document.getElementById('nick-input').value;
-    const message = document.getElementById('message-input').value;
-    if (nick && message) {
-        await sendMessage(nick, message);
-        const messages = await getMessages();
-        renderMessages(messages);
-    } else {
-        alert('Please enter both nickname and message.');
+    // Отримуємо перший елемент у вікні чату (якщо він існує)
+    const existingMessage = chatWindow.firstElementChild;
+
+    // Додаємо нове повідомлення перед першим елементом (якщо він існує)
+    if (existingMessage) {
+        chatWindow.insertBefore(messageDiv, existingMessage);
+    } else { // Якщо перший елемент відсутній, просто додаємо нове повідомлення в кінець
+        chatWindow.appendChild(messageDiv);
     }
 }
-let messageId = 0; // Оголошення messageId
+
+
+let messageId = 0;
 
 const chatWindow = document.createElement('div');
 chatWindow.id = 'chat-window';
@@ -88,7 +74,7 @@ chatWindow.style.overflowY = 'scroll';
 
 const loginInput = document.createElement('input');
 loginInput.id = 'login-input';
-loginInput.placeholder ='Enter your login';
+loginInput.placeholder = 'Enter your login';
 loginInput.style.width = '100%';
 
 const messageInput = document.createElement('input');
@@ -106,29 +92,22 @@ chatWindow.appendChild(messageInput);
 chatWindow.appendChild(sendButton);
 
 document.body.appendChild(chatWindow);
-// Функція для періодичної перевірки нових повідомлень
+
 async function checkLoop() {
     while (true) {
         const messages = await getMessages();
-        renderMessages(messages);
-        await new Promise(resolve => setTimeout(resolve, 5000)); // Затримка 5 секунд перед наступною перевіркою
+        messages.forEach(message => displayMessage(message));
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
 }
 
-function displayMessage(message) {
-    const messageDiv = document.createElement('div');
-    messageDiv.textContent = `${message.nick}: ${message.message}`;
-    chatWindow.appendChild(messageDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight; 
-}
-sendButton.addEventListener('click', async () => {
+sendButton.addEventListener('click', async (event) => {
+    event.preventDefault();
     const nick = loginInput.value;
     const message = messageInput.value;
     await sendMessage(nick, message);
-    messageInput.value = ''; 
+    messageInput.value = '';
 });
-
-
 
 setInterval(async () => {
     try {
@@ -139,42 +118,64 @@ setInterval(async () => {
     } catch (error) {
         console.error(error);
     }
-}, 5000);
+}, 2000);
+
 checkLoop();
+
 
 
 
 // Посилання SWAPI
 
-async function swapiLinks(url){
+async function swapiLinks(url) {
     try {
         const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+        }
         const data = await response.json();
-        const promises =[];
+        const promises = [];
+        const processedURLs = new Set();
 
-        function replaceLinks(obj){
-            for (const key in obj){
-                if (typeof obj[key] === 'string' && obj[key].includes('https://swapi.dev/api')){
-                    promises.push(fetch(obj[key])
-                    .then(res => res.json())
-                    .then(json => {
-                        obj[key]= json;
-                        return replaceLinks(json);
-                    })
-                  );
-                } else if (Array.isArray(obj[key])) {
-                    obj[key].forEach(element => {
-                        if(typeof element === 'string' && element.includes('https://swapi.dev/api')){
-                            promises.push(window.fetch(element)
-                            .then(res => res.json())
+        function replaceLinks(obj) {
+            for (const key in obj) {
+                if (typeof obj[key] === 'string' && obj[key].includes('https://swapi.dev/api')) {
+                    if (!processedURLs.has(obj[key])) {
+                        processedURLs.add(obj[key]);
+                        promises.push(fetch(obj[key])
+                            .then(res => {
+                                if (!res.ok) {
+                                    throw new Error(`Failed to fetch ${obj[key]}: ${res.statusText}`);
+                                }
+                                return res.json();
+                            })
                             .then(json => {
-                                obj[key][obj[key].indexOf(element)] = json;
+                                obj[key] = json;
                                 return replaceLinks(json);
                             })
-                          );
+                        );
+                    }
+                } else if (Array.isArray(obj[key])) {
+                    obj[key].forEach((element, index) => {
+                        if (typeof element === 'string' && element.includes('https://swapi.dev/api')) {
+                            if (!processedURLs.has(element)) {
+                                processedURLs.add(element);
+                                promises.push(fetch(element)
+                                    .then(res => {
+                                        if (!res.ok) {
+                                            throw new Error(`Failed to fetch ${element}: ${res.statusText}`);
+                                        }
+                                        return res.json();
+                                    })
+                                    .then(json => {
+                                        obj[key][index] = json;
+                                        return replaceLinks(json);
+                                    })
+                                );
+                            }
                         }
                     });
-                } else if (typeof obj[key] === 'object' && obj[key] !==null){
+                } else if (typeof obj[key] === 'object' && obj[key] !== null) {
                     replaceLinks(obj[key]);
                 }
             }
@@ -182,15 +183,16 @@ async function swapiLinks(url){
         replaceLinks(data);
         await Promise.all(promises);
         return data;
-    } catch(error) {
+    } catch (error) {
         console.error('Error', error);
         throw error;
     }
 }
 
+
 swapiLinks("https://swapi.dev/api/people/20")
-.then(yodaWithLinks => console.log(JSON.stringify(yodaWithLinks, null, 4)))
-.catch(error => console.error('Error', error));
+    .then(yodaWithLinks => console.log(JSON.stringify(yodaWithLinks, null, 4)))
+    .catch(error => console.error('Error', error));
 
 
 // domEventPromise
@@ -207,7 +209,7 @@ function domEventPromise(element, eventName) {
             element.removeEventListener(eventName, eventHandler);
             resolve(e);
         }
-        
+
         // Додаємо обробник події на вказаний елемент
         element.addEventListener(eventName, eventHandler);
     }
